@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Cycle } from '../cycle';
 import { HttpClient } from '@angular/common/http';
-import { count } from 'rxjs';
 
 @Component({
   selector: 'app-appheader',
@@ -34,7 +33,17 @@ export class AppheaderComponent{
   }
 
   onReturn(id:number,value:string){
-    
+    let numVal = 0;
+    if(value!="")
+      numVal = parseInt(value);
+    const path = 'http://localhost:8080/api';
+    const followpath = 'return';
+    const mainpath = `${path}/${id}/${followpath}?count=${numVal}`;
+
+  
+    this.http.post<Cycle[]>(mainpath,null).subscribe(cycles => {
+      this.cycles = cycles;
+    });
   }
   onRestock(id: number,value: string) {
     let numVal = 0;
@@ -50,19 +59,32 @@ export class AppheaderComponent{
     });
 }
 
-onBorrow(id: number,value : string) {
-  const cycle = this.cycles.find(c => c.id === id);
+onAddToCart(id: number,value : string) {
   let numVal = 0;
-  if(value!="")
-    numVal = parseInt(value);
-  if (cycle) {
-    if(cycle.stock-(cycle.numBorrowed+numVal)>=0)
-      cycle.numBorrowed += numVal;
-    else
-      console.error(`out of stock for cycle ${cycle.brand}`);
-  } else {
-    console.error(`Cycle with id ${id} not found.`);
-  }
-}
+    if(value!="")
+      numVal = parseInt(value);
+    const path = 'http://localhost:8080/api';
+    const followpath = 'borrow';
+    const mainpath = `${path}/${id}/${followpath}?count=${numVal}`;
 
+  
+    this.http.post<Cycle[]>(mainpath,null).subscribe(cycles => {
+      this.cycles = cycles;
+    });
+
+// onBorrow(id: number,value : string) {
+//   let numVal = 0;
+//     if(value!="")
+//       numVal = parseInt(value);
+//     const path = 'http://localhost:8080/api';
+//     const followpath = 'borrow';
+//     const mainpath = `${path}/${id}/${followpath}?count=${numVal}`;
+
+  
+//     this.http.post<Cycle[]>(mainpath,null).subscribe(cycles => {
+//       this.cycles = cycles;
+//     });
+// }
+
+}
 }
