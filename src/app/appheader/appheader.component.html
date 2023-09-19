@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Brand</th>
+            <th>Stock</th>
+            <th>Operation</th>
+        </tr>
+        <tr *ngFor="let cycle of cycles">
+            <td>{{cycle.brand}}</td>
+            <td>{{cycle.stock-cycle.numBorrowed}}</td>
+            <td>
+                <form method="post">
+                    <input type="text" name="borrownumber" #Number>
+                    <input type="button" value="borrow" (click)="onBorrow(cycle.id,Number.value)">
+                    <input type="button" value="restock" (click)="onRestock(cycle.id,Number.value)">
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
